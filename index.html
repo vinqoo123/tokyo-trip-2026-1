@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#315e50">
+<title>東京五天四夜｜旅行計畫</title>
+<style>
+:root{--ink:#202a26;--muted:#66716b;--paper:#fbfaf6;--card:#fff;--accent:#315e50;--gold:#c39a55;--line:#e8e4da;--soft:#f0f4ef;--red:#8a3530}
+*{box-sizing:border-box}body{margin:0;background:var(--paper);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans TC",sans-serif;line-height:1.6}
+header{padding:34px 18px 27px;background:linear-gradient(135deg,#e8eee7,#f5eee1);border-bottom:1px solid var(--line)}
+.hero,main{max-width:1000px;margin:auto}.eyebrow{letter-spacing:.15em;text-transform:uppercase;font-size:.75rem;color:var(--accent);font-weight:800}
+h1{font-size:clamp(2rem,5vw,3.2rem);line-height:1.15;margin:.4rem 0}.sub{color:var(--muted)}
+.pills{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}.pill{background:#fff9;border:1px solid #d9dfd7;padding:5px 10px;border-radius:99px;font-size:.84rem}
+main{padding:18px 14px 50px}.toolbar{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0 18px}.btn,button{font:inherit;cursor:pointer}.btn,button,.maplink{display:inline-block;border:1px solid #cbd8ce;border-radius:9px;padding:8px 11px;background:white;color:var(--accent);text-decoration:none;font-size:.88rem;font-weight:700}.primary{background:var(--accent);color:#fff;border-color:var(--accent)}.danger{color:var(--red);border-color:#e7c7c4}.note{background:#fff;border:1px solid var(--line);border-radius:14px;padding:14px 16px;margin:12px 0 20px;font-size:.92rem}.note strong{color:var(--accent)}
+h2{font-size:1.4rem;margin:27px 0 10px}.day{margin:16px 0 22px;background:var(--card);border:1px solid var(--line);border-radius:17px;overflow:hidden}.dayhead{padding:15px 18px;background:var(--soft);border-bottom:1px solid var(--line)}.dayhead h3{margin:0;font-size:1.1rem}.dayhead p{margin:3px 0 0;color:var(--muted);font-size:.88rem}
+.items{padding:0 18px}.item{display:grid;grid-template-columns:100px minmax(0,1fr);gap:13px;padding:15px 0;border-bottom:1px solid var(--line)}.item:last-child{border-bottom:0}.time{font-weight:800;color:var(--accent);font-size:.91rem}.name{font-weight:800;font-size:1.02rem}.desc{color:var(--muted);font-size:.91rem;margin:4px 0 8px}.status{display:inline-block;border-radius:6px;padding:2px 7px;font-size:.75rem;font-weight:800;margin:4px 0 0 6px}.done{background:#e2f2e5;color:#21653a}.todo{background:#fff0cf;color:#7c5411}.cancel{background:#f9e1df;color:#8a3530}.check{background:#e8edf7;color:#3d527c}.links{display:flex;gap:7px;flex-wrap:wrap;margin-top:8px}.maplink{padding:5px 9px;font-size:.81rem}
+.editbox{background:#f8faf7;border:1px dashed #bdcbbf;border-radius:12px;padding:12px;margin-top:12px}.editgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.field{display:flex;flex-direction:column;gap:4px;font-size:.82rem;font-weight:700;color:var(--muted)}.field.full{grid-column:1/-1}.field input,.field textarea,.field select{width:100%;font:inherit;font-size:16px;color:var(--ink);border:1px solid #cfd6cf;border-radius:8px;padding:9px;background:white}.field textarea{min-height:72px;resize:vertical}.edit-actions{display:flex;flex-wrap:wrap;gap:7px;margin-top:10px}.hidden{display:none!important}
+.daytools{display:flex;gap:7px;flex-wrap:wrap;margin-top:10px}.small{font-size:.8rem;color:var(--muted)}footer{color:var(--muted);font-size:.83rem;border-top:1px solid var(--line);margin-top:30px;padding-top:15px}
+@media(max-width:580px){.item{grid-template-columns:1fr;gap:3px}.items{padding:0 14px}.editgrid{grid-template-columns:1fr}.field.full{grid-column:auto}.toolbar .btn, .toolbar button{flex:1 1 auto;text-align:center}}
+@media print{.toolbar,.editbox,.daytools,.note.tools{display:none!important}body{background:#fff}.day{break-inside:avoid;box-shadow:none}}
+</style>
+</head>
+<body>
+<header><div class="hero">
+<div class="eyebrow">Tokyo · 5 days / 4 nights</div>
+<h1>東京五天四夜</h1>
+<div class="sub">2026.10.15（四）— 10.19（一）｜兩個人的旅行、購物與美食</div>
+<div class="pills"><span class="pill">✈ 去程 BR198</span><span class="pill">✈ 回程 BR197</span><span class="pill">🏨 都城市東京高輪酒店</span><span class="pill">🎂 10/16 生日午餐</span></div>
+</div></header>
+<main>
+<div class="toolbar">
+<button class="primary" id="toggleEdit" type="button">✏️ 開啟編輯模式</button>
+<button id="addItemTop" type="button">＋ 新增行程</button>
+<button id="exportJson" type="button">下載備份（JSON）</button>
+<button id="exportHtml" type="button">下載更新版網站（HTML）</button>
+<button id="importBtn" type="button">匯入備份</button>
+<input class="hidden" id="importFile" type="file" accept=".json,application/json">
+</div>
+<div class="note"><strong>如何使用編輯功能</strong><br>
+開啟編輯模式後，可修改每項行程的時間、地點、說明、Google Maps 連結及預約狀態，也能新增或刪除行程。按「儲存這項」會先儲存在目前瀏覽器。<br>
+<strong>重要：</strong>靜態網站不會自動把你這邊的修改同步給老婆。要讓她看到最新版本，請按「下載更新版網站（HTML）」，將下載的檔案重新命名為 <code>index.html</code>，再上傳到 GitHub Repository 覆蓋原檔案。完成後公開網址就會更新。也可以用 JSON 備份／匯入在不同裝置間轉移修改。
+</div>
+<div id="days"></div>
+<h2>預約狀態總覽</h2>
+<div id="summary" class="note"></div>
+<footer>
+<p>Google Maps 連結會在新分頁開啟。營業時間、交通班次與餐廳訂位細節請於出發前再核對。</p>
+<p>此頁使用瀏覽器端編輯，不需要登入網站。公開網站上的內容任何知道網址的人都可能看到，請勿加入護照號碼、訂位確認碼等敏感資料。</p>
+</footer>
+</main>
+<script>
+const initialData = [
+{date:"2026-10-15",day:"DAY 1｜10/15（四）抵達東京・表參道・夜間活動",theme:"購物暖身＋居酒屋",items:[
+{id:"d1a",time:"上午～下午",name:"桃園 → 成田機場 → 飯店寄放行李",place:"都城市東京高輪酒店／成田機場",desc:"去程長榮 BR198。入境後前往飯店寄放行李；第一天保留交通緩衝。",map:"https://www.google.com/maps/search/?api=1&query=Miyako+City+Tokyo+Takanawa",status:"not-needed",reservation:"不需要預約",links:[["飯店 Google Maps","https://www.google.com/maps/search/?api=1&query=Miyako+City+Tokyo+Takanawa"],["成田機場 Google Maps","https://www.google.com/maps/search/?api=1&query=Narita+International+Airport"]]},
+{id:"d1b",time:"下午",name:"表參道購物：Polo Ralph Lauren、On",place:"表參道／原宿／Cat Street",desc:"先逛 Polo 與 On，也可順逛表參道、原宿和 Cat Street。依抵達時間彈性調整。",map:"https://www.google.com/maps/search/?api=1&query=Omotesando+Tokyo",status:"not-needed",reservation:"不需要預約",links:[["Polo Google Maps","https://www.google.com/maps/search/?api=1&query=Ralph+Lauren+Omotesando+Tokyo"],["On Cat Street Google Maps","https://www.google.com/maps/search/?api=1&query=On+Tokyo+Cat+Street"]]},
+{id:"d1c",time:"18:00",name:"63ANGEL 表演",place:"63ANGEL 活動場地（以票券資訊為準）",desc:"已訂位／預約 18:00。請出發前確認入場時間、場地與散場時間。",map:"https://www.google.com/maps/search/?api=1&query=63ANGEL+Tokyo",status:"booked",reservation:"已預約",links:[["Google Maps 搜尋場地","https://www.google.com/maps/search/?api=1&query=63ANGEL+Tokyo"]]},
+{id:"d1d",time:"20:30",name:"居酒屋「串燒肉男」",place:"串燒肉男（請以訂位確認資訊為準）",desc:"已訂位 20:30。看完表演後前往用餐；請確認表演結束時間與餐廳最後點餐時間。",map:"https://www.google.com/maps/search/?api=1&query=串焼き肉男+東京",status:"booked",reservation:"已預約",links:[["Google Maps 導航","https://www.google.com/maps/search/?api=1&query=串焼き肉男+東京"]]}
+]},
+{date:"2026-10-16",day:"DAY 2｜10/16（五）老婆生日",theme:"生日壽司午餐＋悠閒散步",items:[
+{id:"d2a",time:"12:00",name:"鮨みうら（Sushi Miura）生日午餐",place:"鮨みうら（以訂位確認資訊為準）",desc:"兩位、吧台座位。已預約；已準備日文備註，告知從台灣來東京替老婆慶生。建議提早 10–15 分鐘抵達。",map:"https://www.google.com/maps/search/?api=1&query=鮨みうら+東京",status:"booked",reservation:"已預約",links:[["Google Maps 導航","https://www.google.com/maps/search/?api=1&query=鮨みうら+東京"]]},
+{id:"d2b",time:"下午",name:"青山／表參道散步、咖啡與生日小禮物",place:"青山／表參道",desc:"不安排緊湊行程，留時間兩人慢慢逛街、喝咖啡；也可補逛第一天沒逛完的店。",map:"https://www.google.com/maps/search/?api=1&query=Omotesando+Tokyo",status:"not-needed",reservation:"不需要預約",links:[["表參道 Google Maps","https://www.google.com/maps/search/?api=1&query=Omotesando+Tokyo"],["青山 Google Maps","https://www.google.com/maps/search/?api=1&query=Aoyama+Tokyo"]]},
+{id:"d2c",time:"晚上",name:"自由晚餐／休息",place:"依當天狀況決定",desc:"鮨將司原訂晚餐已取消。當晚保留彈性，依午餐份量與體力決定晚餐。",map:"",status:"not-needed",reservation:"不需要預約",links:[]}
+]},
+{date:"2026-10-17",day:"DAY 3｜10/17（六）銀座・東京站",theme:"百貨、服飾與伴手禮",items:[
+{id:"d3a",time:"上午",name:"銀座購物：GINZA SIX、UNIQLO 銀座等",place:"銀座",desc:"集中逛百貨、男裝與生活風格品牌；先記下想買的品項，再決定是否購入。",map:"https://www.google.com/maps/search/?api=1&query=GINZA+SIX+Tokyo",status:"not-needed",reservation:"不需要預約",links:[["GINZA SIX Google Maps","https://www.google.com/maps/search/?api=1&query=GINZA+SIX+Tokyo"],["UNIQLO 銀座 Google Maps","https://www.google.com/maps/search/?api=1&query=UNIQLO+Ginza+Tokyo"]]},
+{id:"d3b",time:"下午",name:"銀座續逛 → 東京站／丸之內",place:"東京站／丸之內",desc:"沿著銀座慢慢逛，再到東京站周邊看伴手禮與商場，不必把景點塞滿。",map:"https://www.google.com/maps/search/?api=1&query=Tokyo+Station",status:"not-needed",reservation:"不需要預約",links:[["東京站 Google Maps","https://www.google.com/maps/search/?api=1&query=Tokyo+Station"],["丸之內 Google Maps","https://www.google.com/maps/search/?api=1&query=Marunouchi+Tokyo"]]},
+{id:"d3c",time:"晚餐",name:"根室花丸迴轉壽司（KITTE 丸之內）",place:"KITTE 丸之內",desc:"北海道海鮮特色迴轉壽司。尚未預約，請確認候位方式並預留排隊時間；若隊伍太長，改吃東京站周邊其他餐廳。",map:"https://www.google.com/maps/search/?api=1&query=回転寿司+根室花まる+KITTE丸の内",status:"not-booked",reservation:"尚未預約",links:[["Google Maps 導航","https://www.google.com/maps/search/?api=1&query=回転寿司+根室花まる+KITTE丸の内"]]}
+]},
+{date:"2026-10-18",day:"DAY 4｜10/18（日）秋葉原科技購物＋和牛燒肉",theme:"電子產品日",items:[
+{id:"d4a",time:"上午",name:"友都八喜 Yodobashi Camera 秋葉原",place:"Yodobashi Camera Akiba",desc:"重點看相機、Leica／Sony 配件、電腦、螢幕與生活科技產品。購買前比較台灣價格、保固與退稅後價格。",map:"https://www.google.com/maps/search/?api=1&query=Yodobashi+Camera+Akiba",status:"not-needed",reservation:"不需要預約",links:[["Google Maps 導航","https://www.google.com/maps/search/?api=1&query=Yodobashi+Camera+Akiba"]]},
+{id:"d4b",time:"下午",name:"秋葉原電器街／BIC CAMERA",place:"秋葉原電器街",desc:"逛電腦零件、電子配件與科技產品；星期日中央通可能有行人徒步區，依當天公告與天氣為準。",map:"https://www.google.com/maps/search/?api=1&query=Akihabara+Electric+Town",status:"not-needed",reservation:"不需要預約",links:[["BIC CAMERA Google Maps","https://www.google.com/maps/search/?api=1&query=Bic+Camera+Akihabara"],["秋葉原電器街 Google Maps","https://www.google.com/maps/search/?api=1&query=Akihabara+Electric+Town"]]},
+{id:"d4c",time:"12:00",name:"和牛放題の殿堂 肉屋横丁 秋葉原店",place:"BiTO AKIBA 3 樓，秋葉原",desc:"已訂位中午 12:00。主打和牛燒肉吃到飽；請依訂位確認資訊核對入店時間與方案。注意：這是午餐訂位，行程順序請以 12:00 用餐為準。",map:"https://www.google.com/maps/search/?api=1&query=和牛放題の殿堂+肉屋横丁+秋葉原店",status:"booked",reservation:"已預約",links:[["Google Maps 導航","https://www.google.com/maps/search/?api=1&query=和牛放題の殿堂+肉屋横丁+秋葉原店"],["官方店鋪資訊","https://nikuyayokocho.jp/shoplist/akihabara/"]]}
+]},
+{date:"2026-10-19",day:"DAY 5｜10/19（一）回台灣",theme:"早餐、退房、前往成田機場",items:[
+{id:"d5a",time:"早上",name:"早餐、退房、整理行李",place:"都城市東京高輪酒店",desc:"確認護照、登機資料、退稅商品與購物收據；不要安排遠距離景點。",map:"https://www.google.com/maps/search/?api=1&query=Miyako+City+Tokyo+Takanawa",status:"not-needed",reservation:"不需要預約",links:[["飯店 Google Maps","https://www.google.com/maps/search/?api=1&query=Miyako+City+Tokyo+Takanawa"]]},
+{id:"d5b",time:"建議 09:00 左右",name:"飯店 → 成田機場",place:"成田國際機場",desc:"回程長榮 BR197，下午 2 點起飛（請依電子機票再次核對）。從高輪前往成田需預留交通與報到時間，出發前確認當日列車／巴士時刻。",map:"https://www.google.com/maps/dir/?api=1&origin=Miyako+City+Tokyo+Takanawa&destination=Narita+International+Airport",status:"not-needed",reservation:"不需要預約",links:[["Google Maps 路線","https://www.google.com/maps/dir/?api=1&origin=Miyako+City+Tokyo+Takanawa&destination=Narita+International+Airport"],["成田機場 Google Maps","https://www.google.com/maps/search/?api=1&query=Narita+International+Airport"]]}
+]}
+];
+let days = JSON.parse(JSON.stringify(initialData));
+let editMode = false;
+const statusOptions = [
+["booked","已預約"],["not-booked","尚未預約"],["not-needed","不需要預約"],["cancelled","已取消"],["confirm","待確認"]
+];
+function esc(s=""){return String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));}
+function statusClass(s){return ({booked:"done","not-booked":"todo","not-needed":"check",cancelled:"cancel",confirm:"check"})[s]||"check";}
+function statusLabel(s){return (statusOptions.find(x=>x[0]===s)||["confirm","待確認"])[1];}
+function safeUrl(url){try{const u=new URL(url);return ["https:","http:"].includes(u.protocol)?u.href:"";}catch{return "";}}
+function render(){
+ const root=document.getElementById("days");
+ root.innerHTML=days.map((day,di)=>`<section class="day"><div class="dayhead"><h3>${esc(day.day)}</h3><p>${esc(day.theme||"")}</p>${editMode?`<div class="daytools"><button type="button" data-add="${di}">＋ 在這天新增行程</button><button type="button" class="danger" data-dayedit="${di}">編輯日期／標題</button></div>`:""}</div><div class="items">${day.items.map((it,ii)=>renderItem(it,di,ii)).join("")}</div>${editMode&&day.editing?renderDayEditor(day,di):""}</section>`).join("");
+ document.getElementById("toggleEdit").textContent=editMode?"✓ 關閉編輯模式":"✏️ 開啟編輯模式";
+ renderSummary();
+}
+function renderItem(it,di,ii){
+ const links=(it.links||[]).map(l=>`<a class="maplink" target="_blank" rel="noopener" href="${esc(safeUrl(l[1])||"#")}">${esc(l[0])}</a>`).join("");
+ const map=safeUrl(it.map);
+ return `<article class="item"><div class="time">${esc(it.time||"時間未定")}</div><div><div class="name">${esc(it.name)} <span class="status ${statusClass(it.status)}">${esc(statusLabel(it.status))}</span></div><div class="desc">${esc(it.desc||"")}</div><div class="small">地點：${esc(it.place||"尚未設定")}</div><div class="links">${map?`<a class="maplink" target="_blank" rel="noopener" href="${esc(map)}">📍 Google Maps</a>`:""}${links}</div>${editMode?`<div class="editbox"><div class="editgrid">
+<label class="field">時間<input data-field="time" data-di="${di}" data-ii="${ii}" value="${esc(it.time)}" placeholder="例如 18:00"></label>
+<label class="field">預約狀態<select data-field="status" data-di="${di}" data-ii="${ii}">${statusOptions.map(o=>`<option value="${o[0]}" ${it.status===o[0]?"selected":""}>${o[1]}</option>`).join("")}</select></label>
+<label class="field full">行程／店家名稱<input data-field="name" data-di="${di}" data-ii="${ii}" value="${esc(it.name)}"></label>
+<label class="field full">地點／地址<input data-field="place" data-di="${di}" data-ii="${ii}" value="${esc(it.place||"")}" placeholder="輸入地址或地點"></label>
+<label class="field full">說明<textarea data-field="desc" data-di="${di}" data-ii="${ii}">${esc(it.desc||"")}</textarea></label>
+<label class="field full">Google Maps 網址<input data-field="map" data-di="${di}" data-ii="${ii}" value="${esc(it.map||"")}" placeholder="貼上 Google Maps 網址"></label>
+</div><div class="edit-actions"><button type="button" class="primary" data-save="${di},${ii}">儲存這項</button><button type="button" class="danger" data-delete="${di},${ii}">刪除行程</button></div></div>`:""}</div></article>`;
+}
+function renderDayEditor(day,di){
+ return `<div class="editbox"><div class="editgrid"><label class="field">日期<input type="date" data-dayfield="date" data-di="${di}" value="${esc(day.date)}"></label><label class="field">行程標題<input data-dayfield="day" data-di="${di}" value="${esc(day.day)}"></label><label class="field full">當日主題<input data-dayfield="theme" data-di="${di}" value="${esc(day.theme||"")}"></label></div><div class="edit-actions"><button type="button" class="primary" data-saveday="${di}">儲存日期資訊</button></div></div>`;
+}
+function renderSummary(){
+ const all=days.flatMap(d=>d.items);const count=s=>all.filter(i=>i.status===s).length;
+ document.getElementById("summary").innerHTML=`共 ${all.length} 項行程：<span class="status done">已預約 ${count("booked")}</span> <span class="status todo">尚未預約 ${count("not-booked")}</span> <span class="status check">不需要預約 ${count("not-needed")}</span> <span class="status cancel">已取消 ${count("cancelled")}</span> <span class="status check">待確認 ${count("confirm")}</span><p class="small">目前已登記：63ANGEL 10/15 18:00、串燒肉男 10/15 20:30、鮨みうら 10/16 12:00、肉屋横丁 10/18 12:00。根室花丸尚未預約。時間均可在編輯模式修改。</p>`;
+}
+function saveLocal(){try{localStorage.setItem("tokyoTrip2026Data",JSON.stringify(days));}catch(e){}}
+function loadLocal(){try{const raw=localStorage.getItem("tokyoTrip2026Data");if(raw){const parsed=JSON.parse(raw);if(Array.isArray(parsed)&&parsed.length)days=parsed;}}catch(e){}}
+function currentHtml(){
+ const clone=document.documentElement.cloneNode(true);
+ const script=clone.querySelector("script");
+ if(script){script.textContent=script.textContent.replace(/const initialData = \[[\s\S]*?\n\];\nlet days = JSON\.parse\(JSON\.stringify\(initialData\)\);/, "const initialData = "+JSON.stringify(days)+";\nlet days = JSON.parse(JSON.stringify(initialData));");}
+ clone.querySelectorAll(".editbox").forEach(n=>n.remove());
+ clone.querySelectorAll(".hidden").forEach(n=>n.classList.add("hidden"));
+ const out="<!DOCTYPE html>\n"+clone.outerHTML;
+ return out;
+}
+function downloadFile(filename,content,type){const blob=new Blob([content],{type});const a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download=filename;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(a.href),1000);}
+document.getElementById("toggleEdit").addEventListener("click",()=>{editMode=!editMode;render();});
+document.getElementById("addItemTop").addEventListener("click",()=>{
+ const opts=days.map((d,i)=>`${i+1}. ${d.day}`).join("\n");const pick=prompt("要新增到哪一天？輸入數字：\n"+opts,"1");if(pick===null)return;const di=Number(pick)-1;if(!Number.isInteger(di)||di<0||di>=days.length){alert("請輸入清單中的日期編號。");return;}addItem(di);
+});
+function addItem(di){const it={id:"new"+Date.now(),time:"時間未定",name:"新行程",place:"",desc:"",map:"",status:"confirm",reservation:"待確認",links:[]};days[di].items.push(it);editMode=true;render();saveLocal();}
+document.getElementById("days").addEventListener("click",e=>{
+ const add=e.target.closest("[data-add]");if(add){addItem(Number(add.dataset.add));return;}
+ const de=e.target.closest("[data-dayedit]");if(de){const di=Number(de.dataset.dayedit);days[di].editing=!days[di].editing;render();return;}
+ const save=e.target.closest("[data-save]");if(save){const [di,ii]=save.dataset.save.split(",").map(Number);const article=save.closest(".item");article.querySelectorAll("[data-field]").forEach(el=>{days[di].items[ii][el.dataset.field]=el.value.trim();});days[di].items[ii].reservation=statusLabel(days[di].items[ii].status);saveLocal();render();return;}
+ const del=e.target.closest("[data-delete]");if(del){const [di,ii]=del.dataset.delete.split(",").map(Number);if(confirm("確定刪除這項行程？")){days[di].items.splice(ii,1);saveLocal();render();}return;}
+ const sd=e.target.closest("[data-saveday]");if(sd){const di=Number(sd.dataset.saveday);document.querySelectorAll(`[data-dayfield][data-di="${di}"]`).forEach(el=>days[di][el.dataset.dayfield]=el.value);days[di].editing=false;saveLocal();render();}
+});
+document.getElementById("exportJson").addEventListener("click",()=>downloadFile("tokyo-trip-backup.json",JSON.stringify(days,null,2),"application/json;charset=utf-8"));
+document.getElementById("exportHtml").addEventListener("click",()=>downloadFile("index.html",currentHtml(),"text/html;charset=utf-8"));
+document.getElementById("importBtn").addEventListener("click",()=>document.getElementById("importFile").click());
+document.getElementById("importFile").addEventListener("change",async e=>{const file=e.target.files[0];if(!file)return;try{const parsed=JSON.parse(await file.text());if(!Array.isArray(parsed)||!parsed.every(d=>d&&Array.isArray(d.items)))throw new Error();days=parsed;saveLocal();render();alert("匯入成功。");}catch(err){alert("匯入失敗，請選擇此行程網頁匯出的 JSON 備份檔。");}e.target.value="";});
+loadLocal();render();
+</script>
+</body>
+</html>
